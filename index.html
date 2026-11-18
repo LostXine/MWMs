@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MWM</title>
+  <meta name="theme-color" content="#FFFFFF" />
+  <title>Motion World Models</title>
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
-  <meta name="description" content="Project page for Motion World Models for Robot Control" />
+  <meta name="description" content="Motion World Models for robot control." />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -18,19 +19,25 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
-  <!-- ========== TOP ANNOUNCEMENT BAR ========== -->
-  <div class="announcement-bar">
-    <span>02/27/2026: 🚧 We are actively working on this project — paper, code, and models will be released as soon as possible. Stay tuned!</span>
-  </div>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <!-- Floating nav (appears once the hero nav scrolls away) -->
+  <nav class="float-nav" id="float-nav" aria-label="Sections">
+    <a href="#top" class="float-brand">MWMs</a>
+    <div class="float-links">
+      <a href="#abstract">Abstract</a>
+      <a href="#method">Method</a>
+      <a href="#results">Results</a>
+      <a href="#demos">Demos</a>
+      <a href="#references">References</a>
+    </div>
+  </nav>
 
   <!-- ========== HEADER / HERO ========== -->
-  <header class="hero">
+  <header class="hero" id="top">
     <div class="container">
-      <!--div class="venue-tag">Conference / Journal 20XX</div-->
 
       <h1 class="paper-title">
-        Motion World Models for Robot Control
+        Motion World Models <span class="title-subject">for Robot Control</span>
       </h1>
 
       <!-- Authors -->
@@ -40,9 +47,6 @@
         </span>
         <span class="author">
           <a href="https://scholar.google.com/citations?user=HOCyXzsAAAAJ&hl">Yichi Zhang</a>
-        </span>
-        <span class="author">
-          <a href="https://eronguyen.me/">E Ro Nguyen</a>
         </span>
         <span class="author">
           <a href="https://kahnchana.github.io/">Kanchana Ranasinghe</a>
@@ -59,60 +63,86 @@
       <div class="affiliations">
         <span>Stony Brook University</span>
       </div>
-      <div class="affiliations">
-        <span>This website was created on Feb 27, 2026</span>
-      </div>
+      <p class="hero-tldr"><strong>TL;DR:</strong> We adapt a <span class="caption-prediction">pretrained video diffusion</span> into a robot policy by tiling <span class="caption-rgb">future RGB</span>, <span class="caption-motion">pixel motion</span>, and <span class="caption-depth">depth</span> of each camera view in one grid. <br>The model predicts their futures from RGB images and learns actions from shared features.</p>
 
-      <!-- Action buttons -->
-      <!--div class="action-buttons">
-        <a href="#" class="btn btn-primary">
-          <i class="fas fa-file-pdf"></i> Paper
-        </a>
-        <a href="#" class="btn btn-secondary">
-          <i class="fab fa-github"></i> Code
-        </a>
-        <a href="#" class="btn btn-secondary">
-          <i class="fas fa-database"></i> Dataset
-        </a>
-        <a href="#" class="btn btn-secondary">
-          <i class="fas fa-video"></i> Video
-        </a>
-        <a href="#" class="btn btn-secondary">
-          <i class="fas fa-desktop"></i> Demo
-        </a>
-      </div-->
-
-      <!-- Teaser image/video -->
-      <div class="teaser">
-        <figure>
-          <img src="assets/teaser.gif" alt="WM v.s. MWM" />
-          <img src="assets/demo.gif" alt="MWM real-world demo" />
-          <figcaption>
-            <strong>Figure 1. </strong> Comparision between World Models (WM) and <b>Motion World Models (MWM)</b>.
-            MWM leverages a pretrained Image-Text-to-Video diffusion model as System 2 to jointly predict <em>future RGB frames and dense pixel motion</em> sequences. 
-            It achieves improved performance compared to conventional World Models (WM) that predict RGB observations alone.
+        <figure class="figure-wide figure-light figure-demo">
+          <video src="assets/xarm/apple_pick_place_ep000_wide.mp4" poster="assets/xarm/apple_pick_place_ep000_wide.jpg"
+                 autoplay muted loop playsinline controls preload="metadata"
+                 aria-label="Uncut xArm7 apple pickup and basket placement: real static and wrist footage above, corresponding Motion Dreamer predictions below, at 1× speed with no skipped frames"></video>
+          <figcaption><b>xArm7 apple pick and place.</b>
+            <span class="caption-recording">Top: recorded static and wrist views at 1&times; speed.</span>
+            <span class="caption-prediction">Bottom: offline predictions</span> in a 2&times;3 grid: camera views by row, RGB/motion/depth by column.
+            Predictions follow recorded action timestamps and hold between replans; the conditioning panel shows observed RGB only.
           </figcaption>
         </figure>
+
+        <figure class="figure-wide figure-light">
+          <div class="demo-grid">
+            <figure class="demo-card">
+              <video src="assets/xarm/clips/put_banana_into_basket.mp4" poster="assets/xarm/clips/put_banana_into_basket.jpg" autoplay muted loop playsinline preload="metadata" aria-label="xArm7 put banana into basket prediction visualization at 8 fps"></video>
+              <figcaption><span class="demo-task">Put banana into basket</span><span class="demo-src">ep 002 · plan 2</span></figcaption>
+            </figure>
+            <figure class="demo-card">
+              <video src="assets/xarm/clips/put_kiwi_into_basket.mp4" poster="assets/xarm/clips/put_kiwi_into_basket.jpg" autoplay muted loop playsinline preload="metadata" aria-label="xArm7 put kiwi into basket prediction visualization at 8 fps"></video>
+              <figcaption><span class="demo-task">Put kiwi into basket</span><span class="demo-src">ep 002 · plan 2</span></figcaption>
+            </figure>
+
+            <figure class="demo-card">
+              <video src="assets/xarm/clips/put_apple_into_basket.mp4" poster="assets/xarm/clips/put_apple_into_basket.jpg" autoplay muted loop playsinline preload="metadata" aria-label="xArm7 put apple into basket prediction visualization at 8 fps"></video>
+              <figcaption><span class="demo-task">Put apple into basket</span><span class="demo-src">ep 002 · plan 2</span></figcaption>
+            </figure>
+            <figure class="demo-card">
+              <video src="assets/xarm/clips/put_orange_into_basket.mp4" poster="assets/xarm/clips/put_orange_into_basket.jpg" autoplay muted loop playsinline preload="metadata" aria-label="xArm7 put orange into basket prediction visualization at 8 fps"></video>
+              <figcaption><span class="demo-task">Put orange into basket</span><span class="demo-src">ep 002 · plan 2</span></figcaption>
+            </figure>
+          </div>
+          <figcaption><strong>Figure 1.</strong> <b>Motion Dreamer predictions on xArm7.</b>
+            Each clip compares 16 future steps of predicted <span class="caption-rgb">RGB</span>, <span class="caption-motion">motion</span>, and <span class="caption-depth">depth</span> with recorded static and wrist views. Arrows show predicted motion directions.
+            Playback is slowed to 8 fps with endpoint holds. Predictions use 16 denoising steps for visualization.
+          </figcaption>
+        </figure>
+
+      <nav class="page-nav" aria-label="Sections">
+        <a href="#abstract">Abstract</a>
+        <a href="#method">Method</a>
+        <a href="#results">Results</a>
+        <a href="#demos">Demos</a>
+        <a href="#references">References</a>
+      </nav>
+
+      <div class="affiliations meta">
+        <span>Created: <time datetime="2026-02-27">Feb 27, 2026</time></span>
+        <span>Last update: <time datetime="2026-11-17">Nov 17, 2026</time></span>
       </div>
+
     </div>
   </header>
 
-  <main>
+  <main id="main-content">
 
     <!-- ========== ABSTRACT ========== -->
     <section class="section" id="abstract">
       <div class="container narrow">
         <h2 class="section-title">Abstract</h2>
         <p class="abstract-text">
-          <b>Motion World Models (MWM)</b> is a dual-system Vision–Language–Action (VLA) framework. 
-            It leverages a pretrained Image-Text-to-Video diffusion model as System 2 to <em>jointly predict future RGB frames and dense pixel motion sequences</em>. 
-            By explicitly modeling dense motion dynamics in addition to visual appearance, 
-            MWM provides richer predictive representations of future states. 
-            The action expert (System 1) substantially benefits from these motion-aware predictions, 
-            achieving improved performance compared to conventional World Models (WM) that predict RGB observations alone. 
+          We introduce <b>Motion World Models (MWMs)</b>, a framework for language-conditioned visuomotor policy learning that
+          <em>jointly predicts future RGB frames, dense pixel motion, and relative depth</em> with RGB-only visual conditioning.
+          MWMs adapt a pretrained image-text-to-video diffusion model into a <b>Motion Dreamer</b>.
+          Given the current RGB observation and a language instruction, the Motion Dreamer predicts a video using <em>view tiling</em>
+          to combine camera views and all three modalities in each frame.
+          The predicted motion and geometry make future scene changes explicit, providing richer cues for robot control than RGB alone.
+          Then a transformer <b>Action Expert</b> maps the Motion Dreamer's internal features to robot action chunks in one forward pass.
         </p>
         <p class="abstract-text">
-          <a href="https://eronguyen.me/DAWN/">DAWN</a><a href="#ref1" class="cite-tag">[1]</a> is an instantiation of MWM, which is to appear at CVPR 2026.
+          Our joint training design makes effective use of the pretrained diffusion model, enabling adaptation with limited data and modest fine-tuning.
+          Joint motion and depth prediction also improves the quality of predicted RGB frames.
+          Across multiple robot learning datasets, MWMs achieve higher task success rates than strong baselines, including RGB-only world models.
+          We are releasing the code and checkpoints.
+        </p>
+        <p class="abstract-note">
+          <i class="fas fa-circle-info"></i>
+          LangToMo<a href="#ref2" class="cite-tag">[2]</a> and <a href="https://eronguyen.me/DAWN/">DAWN</a><a href="#ref1" class="cite-tag">[1]</a> (CVPR 2026)
+          forecast a single-view motion map with image diffusion; we view them as earlier instantiations of MWMs.
         </p>
       </div>
     </section>
@@ -121,26 +151,30 @@
     <section class="section" id="method">
       <div class="container">
         <h2 class="section-title">Method</h2>
-        <p>
-          Predicting dense pixel motion is an intuitive way to guide robot control. Previous works like <a href="https://arxiv.org/pdf/2505.07817.pdf">LangToMo</a><a href="#ref2" class="cite-tag">[2]</a>, <a href="https://eronguyen.me/DAWN/">DAWN</a><a href="#ref1" class="cite-tag">[1]</a>
-        have shown the great power of <em>single frame dense motion prediction</em>. We take a step further by using a pretrained Image-Text-to-Video diffusion model as System 2 to jointly predict future RGB frames and dense pixel motion sequences, which makes MWM a superset of WM.
+        <p class="lead">
+          One pretrained video model, Wan2.2-TI2V-5B<a href="#ref3" class="cite-tag">[3]</a>, predicts RGB, motion, and depth.
+          We adapt its diffusion transformer (DiT) with LoRA, keeping the base weights frozen.
         </p>
 
-        <!-- Method overview figure -->
-        <figure class="figure-wide">
-          <img src="assets/main.gif" alt="WM v.s. MWM" />
+        <figure class="figure-wide figure-light">
+          <img src="assets/figures/method_overview.png" alt="Two-stage MWM training: multimodal video adaptation trains the Motion Dreamer LoRA; joint policy training updates the LoRA and Action Expert while the VAE, text encoder, and base DiT stay frozen" />
           <figcaption>
-            <strong>Figure 2.</strong> Overview of our Motion World Models (MWM). The input is the current RGB observation and language instruction. System 2 predicts future RGB frames and dense pixel motion sequences. System 1 conditioned on the latent reprensentation from the system 2 and predicts dense action chunks.
+            <strong>Figure 2.</strong> <b>Two-stage training.</b>
+            First, train the Motion Dreamer&rsquo;s LoRA to predict RGB, motion, and depth. Then train the LoRA and Action Expert together on demonstrated actions.
+            The DROID panel shows recorded RGB and derived motion/depth targets. Solid arrows show computation; dotted arrows show gradients; locks mark frozen weights.
           </figcaption>
         </figure>
 
-        <!-- Method subsections -->
-        <hr class="section-divider" />
-        <p class="section-subtitle">
-          Dense Pixel Motion
+        <p class="lead">
+          At control time, the Action Expert uses one DiT pass, language, and robot state to predict an action sequence. No video is decoded.
         </p>
+
+        <!-- Dense pixel motion explorer -->
+        <hr class="section-divider" />
+        <h3 class="subsection-title">Dense Pixel Motion</h3>
         <p>
-          MWM jointly predicts future RGB frames and <em>dense pixel motion</em> sequences. The dense pixel motion encodes Optical Flow and depth change in HSV color space. Check the interactive visualization below for an example by moving the mouse over an image.
+          Motion is encoded in HSV: <b>hue</b> shows direction and <b>brightness</b> shows strength.
+          Hover over the motion image to inspect a pixel.
         </p>
 
         <!-- HSV Explorer: hover over image to inspect pixel color in HSV -->
@@ -161,28 +195,28 @@
               </div>
               <p class="hsv-img-caption" id="hsv-main-caption"></p>
               <div class="hsv-blend-row">
-                <span class="hsv-blend-lbl">Blend</span>
+                <label class="hsv-blend-lbl" for="hsv-opacity">Blend</label>
                 <input type="range" id="hsv-opacity" class="hsv-opacity-slider"
                        min="0" max="100" value="85" />
               </div>
-              
+
             </div>
             <div class="hsv-col hsv-col-viz">
-              <div class="hsv-viz-label">Optical Flow Visualization</div>
-              <p class="hsv-hint">Move cursor over the dense pixel motion image</p>
+              <div class="hsv-viz-label">Dense Pixel Motion</div>
+              <p class="hsv-hint">Hover over the motion image</p>
               <div class="hsv-wheel-wrap">
-                <canvas id="hsv-wheel-bg" width="210" height="210"></canvas>
-                <canvas id="hsv-wheel-fg" width="210" height="210" class="hsv-wheel-fg"></canvas>
+                <canvas id="hsv-wheel-bg" width="200" height="200"></canvas>
+                <canvas id="hsv-wheel-fg" width="200" height="200" class="hsv-wheel-fg"></canvas>
               </div>
               <div class="hsv-values-row">
                 <div class="hsv-val-item">
                   <span class="hsv-val-lbl">H: direction</span>
-                  <span id="hv-h" class="hsv-val-num">—</span>
-                  <span class="hsv-val-unit">°</span>
+                  <span id="hv-h" class="hsv-val-num">&mdash;</span>
+                  <span class="hsv-val-unit">&deg;</span>
                 </div>
                 <div class="hsv-val-item">
                   <span class="hsv-val-lbl">V: strength</span>
-                  <span id="hv-v" class="hsv-val-num">—</span>
+                  <span id="hv-v" class="hsv-val-num">&mdash;</span>
                   <span class="hsv-val-unit">%</span>
                 </div>
               </div>
@@ -192,33 +226,551 @@
           <div class="hsv-dots" id="hsv-dots"></div>
         </div>
 
-        <hr class="section-divider" />
-        <p class="section-subtitle">
-          Major Advantages
+        <figure class="figure-wide figure-light figure-demo">
+          <video src="assets/rollouts/rotate_red_block_right_r2.mp4" poster="assets/rollouts/rotate_red_block_right_r2.jpg"
+                 autoplay muted loop playsinline controls preload="metadata"
+                 aria-label="Animated CALVIN block rotation: current observation, predicted RGB, dense motion and depth, motion directions, and actual rollout"></video>
+          <figcaption>
+            <strong>Figure 3.</strong> <b>&ldquo;Rotate the red block to the right.&rdquo;</b>
+            Predicted RGB, motion, and depth alongside recorded static and gripper views over 12 executed actions.
+            Arrows show predicted motion directions. Predictions use 16 denoising steps for visualization.
+          </figcaption>
+        </figure>
+
+      </div>
+    </section>
+
+    <!-- ========== RESULTS ========== -->
+    <section class="section" id="results">
+      <div class="container">
+        <h2 class="section-title">Results</h2>
+        <p class="lead">
+          On CALVIN<a href="#ref4" class="cite-tag">[4]</a> ABC&rarr;D, models train on environments A&ndash;C and face 1,000 five-task chains in unseen environment D.
+          <b>MWMs-Plus complete 4.74 tasks on average; MWMs complete 4.63</b>&mdash;the best results among methods without extra training data.
         </p>
-        <div class="method-grid">
-          <div class="method-card">
-            <div class="method-icon"><i class="fas fa-microchip"></i></div>
-            <h3>Compute-Efficient</h3>
+
+        <div class="table-card">
+          <div class="table-scroll">
+          <table class="results-table">
+            <caption>
+              <strong>Table 1.</strong> <b>CALVIN ABC&rarr;D.</b> Success rates for 1&ndash;5 consecutive tasks (%) and average tasks completed.
+            </caption>
+            <thead>
+              <tr>
+                <th rowspan="2" class="m">Method</th>
+                <th rowspan="2">Extra<br/>data</th>
+                <th colspan="5">Tasks completed in a row (%)</th>
+                <th rowspan="2">Avg. len &uarr;</th>
+              </tr>
+              <tr><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>
+            </thead>
+            <tbody class="group-extra">
+          <tr class="group-head"><td colspan="8">With extra training data <span>(robot or human video pretraining, inherited robot-pretrained weights)</span></td></tr>
+          <tr class="extra"><td class="m">DAWN <a href="#ref1" class="cite-tag">[1]</a></td><td class="d"><span class="chk" title="Uses additional data">&#10003;</span></td><td>97.8</td><td>91.6</td><td>81.3</td><td>75.2</td><td>64.1</td><td>4.10</td></tr>
+          <tr class="extra"><td class="m">VPP <a href="#ref6" class="cite-tag">[6]</a></td><td class="d"><span class="chk" title="Uses additional data">&#10003;</span></td><td>96.5</td><td>90.9</td><td>86.6</td><td>82.0</td><td>76.9</td><td>4.33</td></tr>
+          <tr class="extra"><td class="m">FOFPred <a href="#ref7" class="cite-tag">[7]</a></td><td class="d"><span class="chk" title="Uses additional data">&#10003;</span></td><td>98.8</td><td>95.0</td><td>90.4</td><td>84.6</td><td>78.7</td><td>4.48</td></tr>
+          <tr class="extra"><td class="m">FLOWER <a href="#ref8" class="cite-tag">[8]</a><sup>&Dagger;</sup></td><td class="d"><span class="chk" title="Uses additional data">&#10003;</span></td><td>99.4</td><td>96.7</td><td>92.2</td><td>86.9</td><td>79.6</td><td>4.55</td></tr>
+          <tr class="extra"><td class="m">AVA-VLA <a href="#ref9" class="cite-tag">[9]</a><sup>&Dagger;</sup></td><td class="d"><span class="chk" title="Uses additional data">&#10003;</span></td><td>99.9</td><td>97.5</td><td>94.1</td><td>89.8</td><td>83.2</td><td>4.65</td></tr>
+          <tr class="extra"><td class="m">Xiaomi-Robotics-0 <a href="#ref10" class="cite-tag">[10]</a><sup>&Dagger;</sup></td><td class="d"><span class="chk" title="Uses additional data">&#10003;</span></td><td>100.0</td><td>98.6</td><td>96.0</td><td>92.3</td><td>88.1</td><td>4.75</td></tr>
+          <tr class="extra"><td class="m">MMaDA-VLA <a href="#ref11" class="cite-tag">[11]</a></td><td class="d"><span class="chk" title="Uses additional data">&#10003;</span></td><td>99.8</td><td>98.6</td><td>96.3</td><td>93.5</td><td>89.7</td><td>4.78</td></tr>
+            </tbody>
+            <tbody class="group-noextra">
+          <tr class="group-head ours-group"><td colspan="8">CALVIN ABC training data only <span>(same data as MWMs)</span></td></tr>
+          <tr class=""><td class="m">DAWN <a href="#ref1" class="cite-tag">[1]</a></td><td class="d"><span class="cross" title="CALVIN ABC only">&times;</span></td><td>98.1</td><td>91.3</td><td>78.8</td><td>71.2</td><td>60.6</td><td>4.00</td></tr>
+          <tr class=""><td class="m">Seer-Large <a href="#ref12" class="cite-tag">[12]</a></td><td class="d"><span class="cross" title="CALVIN ABC only">&times;</span></td><td>96.3</td><td>91.6</td><td>86.1</td><td>80.3</td><td>74.0</td><td>4.28</td></tr>
+          <tr class=""><td class="m">VLA-Adapter-Pro <a href="#ref13" class="cite-tag">[13]</a><sup>&Dagger;</sup></td><td class="d"><span class="cross" title="CALVIN ABC only">&times;</span></td><td>98.9</td><td>94.3</td><td>88.5</td><td>82.6</td><td>75.7</td><td>4.40</td></tr>
+          <tr class=""><td class="m">FLOWER <a href="#ref8" class="cite-tag">[8]</a></td><td class="d"><span class="cross" title="CALVIN ABC only">&times;</span></td><td>99.3</td><td>96.0</td><td>90.3</td><td>82.3</td><td>75.5</td><td>4.44</td></tr>
+          <tr class=""><td class="m">SLIM <a href="#ref14" class="cite-tag">[14]</a></td><td class="d"><span class="cross" title="CALVIN ABC only">&times;</span></td><td>99.3</td><td>96.7</td><td>92.3</td><td>87.1</td><td>80.2</td><td>4.56</td></tr>
+          <tr class=""><td class="m">GeomVLA (RGB-D) <a href="#ref15" class="cite-tag">[15]</a> <sup>&Dagger;</sup></td><td class="d"><span class="cross" title="CALVIN ABC only">&times;</span></td><td class="r1">99.9</td><td>96.8</td><td>92.4</td><td>87.1</td><td>81.3</td><td>4.58</td></tr>
+          <tr class="ours"><td class="m"><b>MWMs</b> (ours)</td><td class="d"><span class="cross" title="CALVIN ABC only">&times;</span></td><td>99.5</td><td class="r2">97.3</td><td class="r2">93.6</td><td class="r2">89.1</td><td class="r2">83.0</td><td class="r2">4.63</td></tr>
+          <tr class="ours plus"><td class="m"><b>MWMs-Plus</b> (ours)</td><td class="d"><span class="cross" title="CALVIN ABC only">&times;</span></td><td class="r2">99.8</td><td class="r1">98.1</td><td class="r1">95.7</td><td class="r1">92.2</td><td class="r1">88.5</td><td class="r1">4.74</td></tr>
+            </tbody>
+          </table>
+          </div>
+          <p class="table-note">
+            <span class="chk">&#10003;</span> Methods in the upper group use datasets beyond CALVIN ABC for policy or predictive pretraining, including human videos and inherited robot-pretrained weights; they are listed for reference and are not directly comparable.
+            <sup>&Dagger;</sup> Our local tests of official released checkpoints; other results are source-reported. GeomVLA uses RGB-D input and was tested with its authors&rsquo; evaluator on the same 1,000 chains (source-reported avg. length 4.62, without chain success rates).
+            Shading marks the <span class="swatch r1"></span> best and <span class="swatch r2"></span> second best per column among methods trained on CALVIN ABC data only.
+            Our numbers are the best single checkpoints; over seeds, final checkpoints average 4.51&nbsp;&plusmn;&nbsp;0.07 (MWMs) and 4.69&nbsp;&plusmn;&nbsp;0.06 (MWMs-Plus).
+          </p>
+        </div>
+
+        <div class="forecasting-result" aria-labelledby="forecasting-title">
+          <div class="split-text">
+            <h3 id="forecasting-title">Joint prediction improves RGB forecasting</h3>
             <p>
-              Training requires only consumer-grade hardware. Inference supports multiple views and two modalities in a single frame.
+              Predicting <span class="tag-motion">motion</span> and <span class="tag-depth">depth</span> alongside RGB improves RGB forecasts on CALVIN and
+              DROID<a href="#ref5" class="cite-tag">[5]</a>, with lower DreamSim scores at every denoising-step count.
+            </p>
+            <p>
+              Motion and depth make scene changes explicit. The resulting features also improve robot control over RGB-only prediction.
             </p>
           </div>
-          <div class="method-card">
-            <div class="method-icon"><i class="fas fa-wind"></i></div>
-            <h3>Better Motion Generation</h3>
-            <p>
-              Generates better Optical Flow compared to extracting it from World Models' prediction, (e.g. AVDC<a href="#ref3" class="cite-tag">[3]</a>).
-            </p>
+          <div class="forecast-plots">
+            <div class="forecast-panel">
+              <h4>CALVIN</h4>
+              <svg class="forecast-chart" viewBox="0 0 440 310" role="img" aria-labelledby="calvin-forecast-title calvin-forecast-desc">
+                <title id="calvin-forecast-title">CALVIN: RGB forecasting quality</title>
+                <desc id="calvin-forecast-desc">DreamSim, lower is better, versus denoising steps on a base-2 logarithmic scale. Joint RGB, motion, and depth prediction has the lowest score at every step count. Exact values are in the table below.</desc>
+                <text class="chart-axis-label" x="58" y="22">DreamSim ↓</text>
+                <line class="chart-grid" x1="58" y1="217.00" x2="412" y2="217.00" /><text class="chart-tick" x="46" y="221.00" text-anchor="end">0.08</text>
+                <line class="chart-grid" x1="58" y1="142.00" x2="412" y2="142.00" /><text class="chart-tick" x="46" y="146.00" text-anchor="end">0.14</text>
+                <line class="chart-grid" x1="58" y1="67.00" x2="412" y2="67.00" /><text class="chart-tick" x="46" y="71.00" text-anchor="end">0.20</text>
+                <path class="chart-axis" d="M58 42V242H412" />
+                <path class="chart-axis" d="M74 242v5" /><text class="chart-tick" x="74" y="266" text-anchor="middle">1</text>
+                <path class="chart-axis" d="M138 242v5" /><text class="chart-tick" x="138" y="266" text-anchor="middle">2</text>
+                <path class="chart-axis" d="M202 242v5" /><text class="chart-tick" x="202" y="266" text-anchor="middle">4</text>
+                <path class="chart-axis" d="M266 242v5" /><text class="chart-tick" x="266" y="266" text-anchor="middle">8</text>
+                <path class="chart-axis" d="M330 242v5" /><text class="chart-tick" x="330" y="266" text-anchor="middle">16</text>
+                <path class="chart-axis" d="M394 242v5" /><text class="chart-tick" x="394" y="266" text-anchor="middle">32</text>
+                <g class="chart-series chart-series-baseline"><polyline points="74,62.170 138,157.347 202,197.722 266,204.662 330,207.240 394,201.170" />
+                  <circle cx="74" cy="62.170" r="4"><title>RGB only, 1 denoising steps: 0.203864</title></circle>
+                  <circle cx="138" cy="157.347" r="4"><title>RGB only, 2 denoising steps: 0.127722</title></circle>
+                  <circle cx="202" cy="197.722" r="4"><title>RGB only, 4 denoising steps: 0.095422</title></circle>
+                  <circle cx="266" cy="204.662" r="4"><title>RGB only, 8 denoising steps: 0.089870</title></circle>
+                  <circle cx="330" cy="207.240" r="4"><title>RGB only, 16 denoising steps: 0.087808</title></circle>
+                  <circle cx="394" cy="201.170" r="4"><title>RGB only, 32 denoising steps: 0.092664</title></circle>
+                </g>
+                <g class="chart-series chart-series-motion"><polyline points="74,91.361 138,192.516 202,215.765 266,219.317 330,219.126 394,216.021" />
+                  <rect x="70" y="87.361" width="8" height="8"><title>RGB + motion, 1 denoising steps: 0.180511</title></rect>
+                  <rect x="134" y="188.516" width="8" height="8"><title>RGB + motion, 2 denoising steps: 0.099587</title></rect>
+                  <rect x="198" y="211.765" width="8" height="8"><title>RGB + motion, 4 denoising steps: 0.080988</title></rect>
+                  <rect x="262" y="215.317" width="8" height="8"><title>RGB + motion, 8 denoising steps: 0.078146</title></rect>
+                  <rect x="326" y="215.126" width="8" height="8"><title>RGB + motion, 16 denoising steps: 0.078299</title></rect>
+                  <rect x="390" y="212.021" width="8" height="8"><title>RGB + motion, 32 denoising steps: 0.080783</title></rect>
+                </g>
+                <g class="chart-series chart-series-joint"><polyline points="74,106.740 138,204.114 202,221.502 266,223.071 330,222.946 394,220.407" />
+                  <path d="M74 101.740l5 9h-10Z"><title>RGB + motion + depth, 1 denoising steps: 0.168208</title></path>
+                  <path d="M138 199.114l5 9h-10Z"><title>RGB + motion + depth, 2 denoising steps: 0.090309</title></path>
+                  <path d="M202 216.502l5 9h-10Z"><title>RGB + motion + depth, 4 denoising steps: 0.076398</title></path>
+                  <path d="M266 218.071l5 9h-10Z"><title>RGB + motion + depth, 8 denoising steps: 0.075143</title></path>
+                  <path d="M330 217.946l5 9h-10Z"><title>RGB + motion + depth, 16 denoising steps: 0.075243</title></path>
+                  <path d="M394 215.407l5 9h-10Z"><title>RGB + motion + depth, 32 denoising steps: 0.077274</title></path>
+                </g>
+                <text class="chart-axis-label" x="235" y="298" text-anchor="middle">Denoising steps</text>
+              </svg>
+            </div>
+            <div class="forecast-panel">
+              <h4>DROID</h4>
+              <svg class="forecast-chart" viewBox="0 0 440 310" role="img" aria-labelledby="droid-forecast-title droid-forecast-desc">
+                <title id="droid-forecast-title">DROID: RGB forecasting quality</title>
+                <desc id="droid-forecast-desc">DreamSim, lower is better, versus denoising steps on a base-2 logarithmic scale. Joint RGB, motion, and depth prediction has the lowest score at every step count. Exact values are in the table below.</desc>
+                <text class="chart-axis-label" x="58" y="22">DreamSim ↓</text>
+                <line class="chart-grid" x1="58" y1="220.95" x2="412" y2="220.95" /><text class="chart-tick" x="46" y="224.95" text-anchor="end">0.12</text>
+                <line class="chart-grid" x1="58" y1="136.74" x2="412" y2="136.74" /><text class="chart-tick" x="46" y="140.74" text-anchor="end">0.20</text>
+                <line class="chart-grid" x1="58" y1="52.53" x2="412" y2="52.53" /><text class="chart-tick" x="46" y="56.53" text-anchor="end">0.28</text>
+                <path class="chart-axis" d="M58 42V242H412" />
+                <path class="chart-axis" d="M74 242v5" /><text class="chart-tick" x="74" y="266" text-anchor="middle">1</text>
+                <path class="chart-axis" d="M138 242v5" /><text class="chart-tick" x="138" y="266" text-anchor="middle">2</text>
+                <path class="chart-axis" d="M202 242v5" /><text class="chart-tick" x="202" y="266" text-anchor="middle">4</text>
+                <path class="chart-axis" d="M266 242v5" /><text class="chart-tick" x="266" y="266" text-anchor="middle">8</text>
+                <path class="chart-axis" d="M330 242v5" /><text class="chart-tick" x="330" y="266" text-anchor="middle">16</text>
+                <path class="chart-axis" d="M394 242v5" /><text class="chart-tick" x="394" y="266" text-anchor="middle">32</text>
+                <g class="chart-series chart-series-baseline"><polyline points="74,61.498 138,135.477 202,160.555 266,172.361 330,187.334 394,184.348" />
+                  <circle cx="74" cy="61.498" r="4"><title>RGB only, 1 denoising steps: 0.271477</title></circle>
+                  <circle cx="138" cy="135.477" r="4"><title>RGB only, 2 denoising steps: 0.201197</title></circle>
+                  <circle cx="202" cy="160.555" r="4"><title>RGB only, 4 denoising steps: 0.177373</title></circle>
+                  <circle cx="266" cy="172.361" r="4"><title>RGB only, 8 denoising steps: 0.166157</title></circle>
+                  <circle cx="330" cy="187.334" r="4"><title>RGB only, 16 denoising steps: 0.151933</title></circle>
+                  <circle cx="394" cy="184.348" r="4"><title>RGB only, 32 denoising steps: 0.154769</title></circle>
+                </g>
+                <g class="chart-series chart-series-joint"><polyline points="74,137.224 138,186.253 202,210.173 266,219.923 330,218.102 394,215.082" />
+                  <path d="M74 132.224l5 9h-10Z"><title>RGB + motion + depth, 1 denoising steps: 0.199537</title></path>
+                  <path d="M138 181.253l5 9h-10Z"><title>RGB + motion + depth, 2 denoising steps: 0.152960</title></path>
+                  <path d="M202 205.173l5 9h-10Z"><title>RGB + motion + depth, 4 denoising steps: 0.130236</title></path>
+                  <path d="M266 214.923l5 9h-10Z"><title>RGB + motion + depth, 8 denoising steps: 0.120973</title></path>
+                  <path d="M330 213.102l5 9h-10Z"><title>RGB + motion + depth, 16 denoising steps: 0.122703</title></path>
+                  <path d="M394 210.082l5 9h-10Z"><title>RGB + motion + depth, 32 denoising steps: 0.125572</title></path>
+                </g>
+                <text class="chart-axis-label" x="235" y="298" text-anchor="middle">Denoising steps</text>
+              </svg>
+            </div>
           </div>
-          <div class="method-card">
-            <div class="method-icon"><i class="fas fa-cube"></i></div>
-            <h3>More Informative</h3>
+          <ul class="forecast-legend" aria-label="Chart legend">
+            <li><span class="legend-mark legend-baseline" aria-hidden="true">●</span> RGB only</li>
+            <li><span class="legend-mark legend-motion" aria-hidden="true">■</span> RGB + motion <span class="legend-note">(CALVIN)</span></li>
+            <li><span class="legend-mark legend-joint" aria-hidden="true">▲</span> RGB + motion + depth</li>
+          </ul>
+          <details class="forecast-data">
+            <summary>View exact values</summary>
+            <div class="table-scroll">
+              <table class="results-table compact">
+                <caption>RGB DreamSim by denoising steps · lower is better</caption>
+                <thead><tr><th class="m">Dataset / prediction</th><th>1</th><th>2</th><th>4</th><th>8</th><th>16</th><th>32</th></tr></thead>
+                <tbody>
+                  <tr><th scope="row" class="m">CALVIN · RGB only</th><td>0.203864</td><td>0.127722</td><td>0.095422</td><td>0.089870</td><td>0.087808</td><td>0.092664</td></tr>
+                  <tr><th scope="row" class="m">CALVIN · RGB + motion</th><td>0.180511</td><td>0.099587</td><td>0.080988</td><td>0.078146</td><td>0.078299</td><td>0.080783</td></tr>
+                  <tr><th scope="row" class="m">CALVIN · RGB + motion + depth</th><td>0.168208</td><td>0.090309</td><td>0.076398</td><td>0.075143</td><td>0.075243</td><td>0.077274</td></tr>
+                  <tr><th scope="row" class="m">DROID · RGB only</th><td>0.271477</td><td>0.201197</td><td>0.177373</td><td>0.166157</td><td>0.151933</td><td>0.154769</td></tr>
+                  <tr><th scope="row" class="m">DROID · RGB + motion + depth</th><td>0.199537</td><td>0.152960</td><td>0.130236</td><td>0.120973</td><td>0.122703</td><td>0.125572</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </details>
+        </div>
+
+        <div class="table-pair">
+          <div class="table-card">
+            <table class="results-table compact">
+              <caption>Motion and depth prediction, PSNR (dB) &uarr;</caption>
+              <thead><tr><th>Dataset</th><th>Motion and depth come from</th><th>Motion</th><th>Depth</th></tr></thead>
+              <tbody>
+                <tr><td class="m" rowspan="3">CALVIN</td><td class="m">RGB-only predictions (extracted)</td><td>18.88</td><td>8.92</td></tr>
+                <tr><td class="m">Direct prediction, RGB + motion</td><td class="r1">20.03</td><td>&ndash;</td></tr>
+                <tr class="ours"><td class="m">Direct prediction, RGB + motion + depth</td><td class="r2">19.96</td><td class="r1">20.58</td></tr>
+                <tr><td class="m" rowspan="2">DROID</td><td class="m">RGB-only predictions (extracted)</td><td>17.26</td><td>18.06</td></tr>
+                <tr class="ours"><td class="m">Direct prediction, RGB + motion + depth</td><td class="r1">17.41</td><td class="r1">19.92</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <hr class="section-divider" />
+        <h3 class="subsection-title">Ablations on CALVIN ABC&rarr;D</h3>
+        <p class="lead">
+          Each policy trains for 20,000 steps with three seeds. Scores are average tasks completed (mean &plusmn; standard deviation)
+          at the lowest-validation-loss checkpoint (&ldquo;min val.&rdquo;) and the final checkpoint (&ldquo;last&rdquo;).
+        </p>
+
+        <div class="table-card">
+          <div class="table-scroll">
+            <table class="results-table compact">
+              <caption>Table 2. What should the Motion Dreamer predict?</caption>
+              <thead>
+                <tr><th rowspan="2">Visual features</th><th rowspan="2">Image grid</th><th colspan="2">Action Expert only</th><th colspan="2">Action Expert + LoRA</th></tr>
+                <tr><th>min val.</th><th>last</th><th>min val.</th><th>last</th></tr>
+              </thead>
+              <tbody>
+                <tr><td class="m">DINOv3-B/16 only</td><td>&ndash;</td><td>2.641 &plusmn; 0.177</td><td>2.576 &plusmn; 0.174</td><td>&ndash;</td><td>&ndash;</td></tr>
+                <tr><td class="m">Vanilla Wan (no predictive training)</td><td>1&times;2</td><td>1.801 &plusmn; 0.140</td><td>1.801 &plusmn; 0.108</td><td>3.547 &plusmn; 0.106</td><td>3.741 &plusmn; 0.196</td></tr>
+                <tr><td class="m">World model, RGB</td><td>1&times;2</td><td>3.060 &plusmn; 0.383</td><td>3.465 &plusmn; 0.030</td><td>4.353 &plusmn; 0.124</td><td>4.385 &plusmn; 0.063</td></tr>
+                <tr><td class="m">Motion only (DAWN-style)</td><td>1&times;2</td><td>3.411 &plusmn; 0.026</td><td>3.431 &plusmn; 0.013</td><td>4.077 &plusmn; 0.220</td><td>4.119 &plusmn; 0.053</td></tr>
+                <tr><td class="m">MWMs, RGB + depth</td><td>2&times;2</td><td>3.310 &plusmn; 0.110</td><td>3.389 &plusmn; 0.033</td><td>4.414 &plusmn; 0.064</td><td>4.457 &plusmn; 0.090</td></tr>
+                <tr><td class="m">MWMs, RGB + motion</td><td>2&times;2</td><td>3.391 &plusmn; 0.190</td><td>3.485 &plusmn; 0.158</td><td>4.271 &plusmn; 0.350</td><td>4.505 &plusmn; 0.034</td></tr>
+                <tr class="ours"><td class="m">MWMs, RGB + motion + depth</td><td>2&times;3</td><td>3.517 &plusmn; 0.106</td><td>3.513 &plusmn; 0.077</td><td>4.528 &plusmn; 0.113</td><td>4.512 &plusmn; 0.067</td></tr>
+                <tr class="ours plus"><td class="m">MWMs-Plus</td><td>2&times;3</td><td>&ndash;</td><td>&ndash;</td><td>4.692 &plusmn; 0.059</td><td>4.658 &plusmn; 0.044</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="table-note">
+            Joint RGB, motion, and depth prediction gives the best Motion Dreamer features. Continuing LoRA training during policy learning adds about one task per chain.
+            MWMs-Plus checkpoints are at steps 16,000 and 20,000.
+          </p>
+        </div>
+
+        <div class="split split-wide">
+          <div class="forecast-panel horizon-panel">
+            <h4>CALVIN · execution horizon</h4>
+            <ul class="forecast-legend" aria-label="Chart legend">
+              <li><span class="legend-mark legend-joint" aria-hidden="true">●</span> MWMs-Plus</li>
+              <li><span class="legend-mark legend-motion" aria-hidden="true">■</span> MWMs (Linear)</li>
+            </ul>
+            <svg class="forecast-chart" viewBox="0 0 440 310" role="img" aria-labelledby="horizon-title horizon-desc">
+              <title id="horizon-title">Average tasks completed versus executed actions</title>
+              <desc id="horizon-desc">CALVIN evaluation over 1,000 chains at two fixed checkpoints. Both methods peak at 12 executed actions: MWMs-Plus scores 4.743 and MWMs (Linear) scores 4.598. The shaded band marks 12 actions. Exact values are in the table below.</desc>
+              <text class="chart-axis-label" x="58" y="22">Average tasks completed ↑</text>
+              <rect class="horizon-band" x="238" y="42" width="24" height="200" />
+              <line class="chart-grid" x1="58" y1="242.00" x2="412" y2="242.00" /><text class="chart-tick" x="46" y="246.00" text-anchor="end">4.4</text>
+              <line class="chart-grid" x1="58" y1="192.00" x2="412" y2="192.00" /><text class="chart-tick" x="46" y="196.00" text-anchor="end">4.5</text>
+              <line class="chart-grid" x1="58" y1="142.00" x2="412" y2="142.00" /><text class="chart-tick" x="46" y="146.00" text-anchor="end">4.6</text>
+              <line class="chart-grid" x1="58" y1="92.00" x2="412" y2="92.00" /><text class="chart-tick" x="46" y="96.00" text-anchor="end">4.7</text>
+              <line class="chart-grid" x1="58" y1="42.00" x2="412" y2="42.00" /><text class="chart-tick" x="46" y="46.00" text-anchor="end">4.8</text>
+              <path class="chart-axis" d="M58 42V242H412" />
+              <path class="chart-axis" d="M70 242v5" />
+              <text class="chart-tick" x="70" y="266" text-anchor="middle">6</text>
+              <path class="chart-axis" d="M100 242v3" />
+              <path class="chart-axis" d="M130 242v5" />
+              <text class="chart-tick" x="130" y="266" text-anchor="middle">8</text>
+              <path class="chart-axis" d="M160 242v3" />
+              <path class="chart-axis" d="M190 242v5" />
+              <text class="chart-tick" x="190" y="266" text-anchor="middle">10</text>
+              <path class="chart-axis" d="M220 242v3" />
+              <path class="chart-axis" d="M250 242v5" />
+              <text class="chart-tick" x="250" y="266" text-anchor="middle">12</text>
+              <path class="chart-axis" d="M280 242v3" />
+              <path class="chart-axis" d="M310 242v5" />
+              <text class="chart-tick" x="310" y="266" text-anchor="middle">14</text>
+              <path class="chart-axis" d="M340 242v3" />
+              <path class="chart-axis" d="M370 242v5" />
+              <text class="chart-tick" x="370" y="266" text-anchor="middle">16</text>
+              <path class="chart-axis" d="M400 242v3" />
+              <text class="chart-tick" x="400" y="266" text-anchor="middle">17</text>
+              <g class="chart-series chart-series-joint"><polyline points="70,227.500 100,170.500 130,113.500 160,107.000 190,92.500 220,93.000 250,70.500 280,98.000 310,92.500 340,73.500 370,90.500 400,102.000" />
+                <circle cx="70" cy="227.500" r="3.5"><title>MWMs-Plus, 6 actions: 4.429</title></circle>
+                <circle cx="100" cy="170.500" r="3.5"><title>MWMs-Plus, 7 actions: 4.543</title></circle>
+                <circle cx="130" cy="113.500" r="3.5"><title>MWMs-Plus, 8 actions: 4.657</title></circle>
+                <circle cx="160" cy="107.000" r="3.5"><title>MWMs-Plus, 9 actions: 4.670</title></circle>
+                <circle cx="190" cy="92.500" r="3.5"><title>MWMs-Plus, 10 actions: 4.699</title></circle>
+                <circle cx="220" cy="93.000" r="3.5"><title>MWMs-Plus, 11 actions: 4.698</title></circle>
+                <circle cx="250" cy="70.500" r="5"><title>MWMs-Plus, 12 actions: 4.743</title></circle>
+                <circle cx="280" cy="98.000" r="3.5"><title>MWMs-Plus, 13 actions: 4.688</title></circle>
+                <circle cx="310" cy="92.500" r="3.5"><title>MWMs-Plus, 14 actions: 4.699</title></circle>
+                <circle cx="340" cy="73.500" r="3.5"><title>MWMs-Plus, 15 actions: 4.737</title></circle>
+                <circle cx="370" cy="90.500" r="3.5"><title>MWMs-Plus, 16 actions: 4.703</title></circle>
+                <circle cx="400" cy="102.000" r="3.5"><title>MWMs-Plus, 17 actions: 4.680</title></circle>
+              </g>
+              <g class="chart-series chart-series-motion"><polyline points="160,188.000 190,184.500 220,192.500 250,143.000 280,156.000 310,170.500 340,156.000 370,174.500 400,185.000" />
+                <rect x="156.5" y="184.500" width="7" height="7"><title>MWMs (Linear), 9 actions: 4.508</title></rect>
+                <rect x="186.5" y="181.000" width="7" height="7"><title>MWMs (Linear), 10 actions: 4.515</title></rect>
+                <rect x="216.5" y="189.000" width="7" height="7"><title>MWMs (Linear), 11 actions: 4.499</title></rect>
+                <rect x="246.5" y="139.500" width="7" height="7"><title>MWMs (Linear), 12 actions: 4.598</title></rect>
+                <rect x="276.5" y="152.500" width="7" height="7"><title>MWMs (Linear), 13 actions: 4.572</title></rect>
+                <rect x="306.5" y="167.000" width="7" height="7"><title>MWMs (Linear), 14 actions: 4.543</title></rect>
+                <rect x="336.5" y="152.500" width="7" height="7"><title>MWMs (Linear), 15 actions: 4.572</title></rect>
+                <rect x="366.5" y="171.000" width="7" height="7"><title>MWMs (Linear), 16 actions: 4.535</title></rect>
+                <rect x="396.5" y="181.500" width="7" height="7"><title>MWMs (Linear), 17 actions: 4.514</title></rect>
+              </g>
+              <text class="horizon-value chart-series-joint" x="250" y="58.500" text-anchor="middle">4.743</text>
+              <text class="horizon-value chart-series-joint" x="340" y="61.500" text-anchor="middle">4.737</text>
+              <text class="horizon-value chart-series-motion" x="250" y="131.000" text-anchor="middle">4.598</text>
+              <text class="chart-axis-label" x="235" y="298" text-anchor="middle">Executed actions before replanning</text>
+            </svg>
+            <details class="forecast-data">
+              <summary>View exact values</summary>
+              <div class="table-scroll">
+                <table class="results-table compact horizon-values">
+                  <caption>Average tasks completed · 1,000 CALVIN chains, fixed checkpoints</caption>
+                  <thead><tr><th>Actions</th><th>MWMs-Plus</th><th>MWMs (Linear)</th></tr></thead>
+                  <tbody>
+                    <tr><th scope="row">6</th><td>4.429</td><td>&ndash;</td></tr>
+                    <tr><th scope="row">7</th><td>4.543</td><td>&ndash;</td></tr>
+                    <tr><th scope="row">8</th><td>4.657</td><td>&ndash;</td></tr>
+                    <tr><th scope="row">9</th><td>4.670</td><td>4.508</td></tr>
+                    <tr><th scope="row">10</th><td>4.699</td><td>4.515</td></tr>
+                    <tr><th scope="row">11</th><td>4.698</td><td>4.499</td></tr>
+                    <tr><th scope="row">12</th><td>4.743</td><td>4.598</td></tr>
+                    <tr><th scope="row">13</th><td>4.688</td><td>4.572</td></tr>
+                    <tr><th scope="row">14</th><td>4.699</td><td>4.543</td></tr>
+                    <tr><th scope="row">15</th><td>4.737</td><td>4.572</td></tr>
+                    <tr><th scope="row">16</th><td>4.703</td><td>4.535</td></tr>
+                    <tr><th scope="row">17</th><td>4.680</td><td>4.514</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </details>
+          </div>
+          <div class="split-text">
+            <h3>Predict 17 actions, execute 12</h3>
+            <table class="results-table compact inline">
+              <caption>Table 3. Action decoder</caption>
+              <thead><tr><th>Decoder</th><th>min val.</th><th>last</th></tr></thead>
+              <tbody>
+                <tr><td class="m">L1 regression</td><td>3.705 &plusmn; 0.346</td><td>3.991 &plusmn; 0.156</td></tr>
+                <tr><td class="m">Action diffusion</td><td>4.199 &plusmn; 0.087</td><td>4.201 &plusmn; 0.070</td></tr>
+                <tr class="ours"><td class="m">Discrete bins (ours)</td><td class="r1">4.528 &plusmn; 0.113</td><td class="r1">4.512 &plusmn; 0.067</td></tr>
+              </tbody>
+            </table>
             <p>
-              Jointly predicts depth changes, providing richer signals for improved robot control.
+              Predicting 256 bins per action dimension outperforms L1 regression and action diffusion.
+              Executing 12 of the 17 predicted actions before replanning works best; MWMs-Plus remain strong across 8&ndash;17 actions.
             </p>
           </div>
         </div>
+
+        <div class="table-card">
+          <div class="table-scroll">
+            <table class="results-table compact">
+              <caption>Table 4. Inference cost on one RTX 5090</caption>
+              <thead><tr><th>Method</th><th>Executed actions</th><th>ms / plan &darr;</th><th>ms / action &darr;</th><th>Peak GPU memory (GiB)</th></tr></thead>
+              <tbody>
+                <tr class="group-head"><td colspan="5">Text features cached per instruction</td></tr>
+                <tr class="ours plus"><td class="m">MWMs-Plus</td><td>12</td><td>97.0</td><td class="r1">8.1</td><td>10.85</td></tr>
+                <tr><td class="m">VPP<a href="#ref6" class="cite-tag">[6]</a></td><td>10</td><td>96.4</td><td>10.5</td><td>5.56</td></tr>
+                <tr class="group-head"><td colspan="5">Text encoded at every plan</td></tr>
+                <tr class="ours plus"><td class="m">MWMs-Plus</td><td>12</td><td>136.5</td><td>11.4</td><td>21.43</td></tr>
+                <tr><td class="m">VPP<a href="#ref6" class="cite-tag">[6]</a></td><td>10</td><td>104.2</td><td>11.2</td><td>5.56</td></tr>
+                <tr><td class="m">FLOWER<a href="#ref8" class="cite-tag">[8]</a></td><td>10</td><td>156.4</td><td>16.8</td><td>3.76</td></tr>
+                <tr><td class="m">AVA-VLA<a href="#ref9" class="cite-tag">[9]</a></td><td>8</td><td>147.2</td><td>18.5</td><td>14.85</td></tr>
+                <tr><td class="m">GeomVLA<a href="#ref15" class="cite-tag">[15]</a></td><td>10</td><td>310.6</td><td>31.1</td><td>5.68</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="table-note">
+            One DiT pass per plan, with no video decoding. Timings use synthetic CALVIN-shaped inputs after warm-up.
+          </p>
+        </div>
+        <!-- Real-world control results are temporarily withheld. -->
+        <template id="realworld-control-hidden">
+        <hr class="section-divider" />
+        <h3 class="subsection-title" id="realworld-control">Real-world control: fruit toy packing</h3>
+        <p class="lead">
+          An xArm7 robot lifts five fruit toys and places them into a basket, using static and wrist RGB views, a language instruction, and measured robot state.
+          Each lift and placement is a separate subtask, for a maximum task length of ten. Each rollout stops at the first failure.
+        </p>
+        <div class="split">
+          <figure class="split-fig figure-light">
+            <img src="assets/figures/xarm7_realworld.jpg" loading="lazy" alt="xArm7 robot with a basket and fruit toys on the table for the real-world packing experiment" />
+            <figcaption>Five fruit toys: apple, banana, grapes, kiwi, and orange.</figcaption>
+          </figure>
+          <div class="split-text">
+            <div class="table-scroll">
+              <table class="results-table compact">
+                <caption>Fruit toy packing &middot; five rollouts per policy</caption>
+                <thead><tr><th>Method</th><th>Avg. length &uarr;<br/>(max. 10)</th><th>Subtasks &uarr;</th><th>Full trials &uarr;</th></tr></thead>
+                <tbody>
+                  <tr><td class="m">&pi;<sub>0.5</sub></td><td>8.00 &plusmn; 3.46</td><td>40/50 (80%)</td><td>3/5</td></tr>
+                  <tr><td class="m">RGB 1&times;2</td><td>2.20 &plusmn; 1.48</td><td>11/50 (22%)</td><td>0/5</td></tr>
+                  <tr class="ours"><td class="m"><b>MWMs</b></td><td>8.00 &plusmn; 2.45</td><td>40/50 (80%)</td><td>2/5</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="table-note">Means and sample standard deviations over five rollouts. Subtasks and full trials count total successes.</p>
+            <p>MWMs match &pi;<sub>0.5</sub> in average task length and completed subtasks, exceeding the RGB-only world model. &pi;<sub>0.5</sub> completes more full trials.</p>
+            <p>The RGB-only world model and MWMs share the Action Expert and continued LoRA adaptation. During evaluation, packed toys stay in the basket, testing generalization as objects are removed from the table.</p>
+          </div>
+        </div>
+        <figure class="figure-wide figure-light">
+          <a href="assets/figures/motion_dreamer_xarm.png" target="_blank" rel="noopener">
+            <img src="assets/figures/motion_dreamer_xarm.png" loading="lazy" alt="Put apple into the basket: current static and wrist images, predicted RGB, motion and depth at five future offsets, motion-direction arrows, and the recorded rollout" />
+          </a>
+          <figcaption><strong>Figure 5.</strong> <b>Motion Dreamer predictions during xArm7 basket placement.</b>
+            Top: predictions decoded with 16 denoising steps; middle: predicted motion directions; bottom: recorded RGB at matching action offsets.
+            Occupied tiles of the native 3&times;4 grid are rearranged into static/wrist rows and RGB/motion/depth columns for display.
+            Decoding is for visualization only. Select the figure to inspect it at full resolution.
+          </figcaption>
+        </figure>
+        </template>
+      </div>
+    </section>
+
+    <!-- ========== DEMOS ========== -->
+    <section class="section" id="demos">
+      <div class="container">
+        <h2 class="section-title">Demo Episodes</h2>
+        <p class="lead">
+          CALVIN rollouts: each clip compares predicted RGB, motion, and depth with recorded views over 12 actions from one plan. Arrows show predicted motion directions.
+        </p>
+        <div class="demo-grid">
+          <figure class="demo-card">
+            <video src="assets/rollouts/lift_red_block_slider.mp4" poster="assets/rollouts/lift_red_block_slider.jpg" autoplay muted loop playsinline preload="metadata"></video>
+            <figcaption><span class="demo-task">Lift red block from slider</span><span class="demo-src">seq 195 · replan 3</span></figcaption>
+          </figure>
+          <figure class="demo-card">
+            <video src="assets/rollouts/lift_red_block_table.mp4" poster="assets/rollouts/lift_red_block_table.jpg" autoplay muted loop playsinline preload="metadata"></video>
+            <figcaption><span class="demo-task">Lift red block from table</span><span class="demo-src">seq 265 · replan 3</span></figcaption>
+          </figure>
+          <figure class="demo-card">
+            <video src="assets/rollouts/move_slider_right.mp4" poster="assets/rollouts/move_slider_right.jpg" autoplay muted loop playsinline preload="metadata"></video>
+            <figcaption><span class="demo-task">Move slider right</span><span class="demo-src">seq 697 · replan 1</span></figcaption>
+          </figure>
+          <figure class="demo-card">
+            <video src="assets/rollouts/rotate_red_block_right_r2.mp4" poster="assets/rollouts/rotate_red_block_right_r2.jpg" autoplay muted loop playsinline preload="metadata"></video>
+            <figcaption><span class="demo-task">Rotate red block right</span><span class="demo-src">seq 265 · replan 2</span></figcaption>
+          </figure>
+        </div>
+        <p class="demo-note">
+          Videos use 16 denoising steps for visualization. Robot control uses one DiT pass and decodes no video.
+        </p>
+
+        <!-- Real-world prediction demos are temporarily withheld. Assets are retained. -->
+        <template id="realworld-demos-hidden">
+        <hr class="section-divider" />
+        <h3 class="subsection-title">Real-world prediction</h3>
+        <p class="lead">
+          Separately from the CALVIN experiments, we pretrain a Motion Dreamer on real robot data from Bridge, DROID, and Galaxea with the same view-tiled RGB, motion, and depth targets.
+          Below, the <b>600k-step pretrained checkpoint</b> predicts 16 future frames from a single observation and a language instruction
+          (16 denoising steps). The left column is the ground-truth future for comparison.
+        </p>
+        <figure class="figure-wide figure-light">
+          <a href="assets/figures/realworld_gallery.png" target="_blank" rel="noopener">
+            <img src="assets/figures/realworld_gallery.png" loading="lazy" alt="Real-robot prediction gallery: DROID pouring, Galaxea towel wiping, and an unseen bimanual robot moving a pot; observed RGB, predicted RGB, motion, depth, and recorded future views" />
+          </a>
+          <figcaption><strong>Figure 6.</strong> <b>Predictions across real robot setups.</b>
+            Rows compare the observation at <i>t</i>, predicted RGB, motion, and relative depth at <i>t</i>+10, and recorded RGB at <i>t</i>+10.
+            DROID and Galaxea are represented in pretraining; our bimanual setup is absent from pretraining.
+            On the unseen robot, predicted RGB underestimates the arm motion. These are qualitative prediction examples; closed-loop xArm7 results appear above.
+            Select the figure to inspect it at full resolution.
+          </figcaption>
+        </figure>
+        <div class="rw-tabs" role="tablist">
+          <button class="rw-tab active" data-ds="bridge" role="tab">Bridge <span>WidowX &middot; 1 view</span></button>
+          <button class="rw-tab" data-ds="droid" role="tab">DROID <span>Franka &middot; 3 views</span></button>
+          <button class="rw-tab" data-ds="galaxea" role="tab">Galaxea <span>bimanual &middot; 3 views</span></button>
+          <button class="rw-tab" data-ds="ours" role="tab">Our setup <span>bimanual &middot; unseen</span></button>
+        </div>
+        <div class="rw-panel active" data-ds="bridge">
+          <div class="demo-grid rw-grid-1">
+            <figure class="demo-card rw-card">
+              <video data-src="assets/realworld/bridge_1.mp4" poster="assets/realworld/bridge_1.jpg" muted loop playsinline preload="none"></video>
+              <figcaption><span class="demo-prompt">&ldquo;take the white object out of the drawer&rdquo;</span></figcaption>
+            </figure>
+            <figure class="demo-card rw-card">
+              <video data-src="assets/realworld/bridge_2.mp4" poster="assets/realworld/bridge_2.jpg" muted loop playsinline preload="none"></video>
+              <figcaption><span class="demo-prompt">&ldquo;Put the brush on the cloth.&rdquo;</span></figcaption>
+            </figure>
+            <figure class="demo-card rw-card">
+              <video data-src="assets/realworld/bridge_3.mp4" poster="assets/realworld/bridge_3.jpg" muted loop playsinline preload="none"></video>
+              <figcaption><span class="demo-prompt">&ldquo;put the silver lid on the silver pot&rdquo;</span></figcaption>
+            </figure>
+            <figure class="demo-card rw-card">
+              <video data-src="assets/realworld/bridge_4.mp4" poster="assets/realworld/bridge_4.jpg" muted loop playsinline preload="none"></video>
+              <figcaption><span class="demo-prompt">&ldquo;put the green cube on top of blue block&rdquo;</span></figcaption>
+            </figure>
+          </div>
+        </div>
+        <div class="rw-panel" data-ds="droid">
+          <div class="demo-grid rw-grid-3">
+            <figure class="demo-card rw-card">
+              <video data-src="assets/realworld/droid_1.mp4" poster="assets/realworld/droid_1.jpg" muted loop playsinline preload="none"></video>
+              <figcaption><span class="demo-prompt">&ldquo;Pour the contents in the orange cup into the white bowl&rdquo;</span></figcaption>
+            </figure>
+            <figure class="demo-card rw-card">
+              <video data-src="assets/realworld/droid_2.mp4" poster="assets/realworld/droid_2.jpg" muted loop playsinline preload="none"></video>
+              <figcaption><span class="demo-prompt">&ldquo;Pick the lid from the table, place it on the bottle, put it back on the table then place it on the bottle again&rdquo;</span></figcaption>
+            </figure>
+            <figure class="demo-card rw-card">
+              <video data-src="assets/realworld/droid_3.mp4" poster="assets/realworld/droid_3.jpg" muted loop playsinline preload="none"></video>
+              <figcaption><span class="demo-prompt">&ldquo;Turn on the light&rdquo;</span></figcaption>
+            </figure>
+            <figure class="demo-card rw-card">
+              <video data-src="assets/realworld/droid_4.mp4" poster="assets/realworld/droid_4.jpg" muted loop playsinline preload="none"></video>
+              <figcaption><span class="demo-prompt">&ldquo;Put the bottle on the table on the left side of the tray&rdquo;</span></figcaption>
+            </figure>
+          </div>
+        </div>
+        <div class="rw-panel" data-ds="galaxea">
+          <div class="demo-grid rw-grid-3">
+            <figure class="demo-card rw-card">
+              <video data-src="assets/realworld/galaxea_1.mp4" poster="assets/realworld/galaxea_1.jpg" muted loop playsinline preload="none"></video>
+              <figcaption><span class="demo-prompt">&ldquo;Place the towel back on the washstand with your right hand.&rdquo;</span></figcaption>
+            </figure>
+            <figure class="demo-card rw-card">
+              <video data-src="assets/realworld/galaxea_2.mp4" poster="assets/realworld/galaxea_2.jpg" muted loop playsinline preload="none"></video>
+              <figcaption><span class="demo-prompt">&ldquo;Pick up the towel with your left hand and wipe the stain. Place the towel on the table with your left hand.&rdquo;</span></figcaption>
+            </figure>
+            <figure class="demo-card rw-card">
+              <video data-src="assets/realworld/galaxea_3.mp4" poster="assets/realworld/galaxea_3.jpg" muted loop playsinline preload="none"></video>
+              <figcaption><span class="demo-prompt">&ldquo;Pick up the towel with your right hand and wipe the stain. Place the towel on the table with your right hand.&rdquo;</span></figcaption>
+            </figure>
+            <figure class="demo-card rw-card">
+              <video data-src="assets/realworld/galaxea_4.mp4" poster="assets/realworld/galaxea_4.jpg" muted loop playsinline preload="none"></video>
+              <figcaption><span class="demo-prompt">&ldquo;Pick up the towel with the right hand and wipe the stain. Place the towel on the table with the right hand.&rdquo;</span></figcaption>
+            </figure>
+          </div>
+        </div>
+        <div class="rw-panel" data-ds="ours">
+          <div class="demo-grid rw-grid-3">
+            <figure class="demo-card rw-card">
+              <video data-src="assets/realworld/ours_1.mp4" poster="assets/realworld/ours_1.jpg" muted loop playsinline preload="none"></video>
+              <figcaption><span class="demo-prompt">&ldquo;Move the pot from the table to the left burner&rdquo;</span><span class="demo-src">frames 80&ndash;112</span></figcaption>
+            </figure>
+            <figure class="demo-card rw-card">
+              <video data-src="assets/realworld/ours_2.mp4" poster="assets/realworld/ours_2.jpg" muted loop playsinline preload="none"></video>
+              <figcaption><span class="demo-prompt">&ldquo;Move the pot from the left burner to the table&rdquo;</span><span class="demo-src">frames 80&ndash;112</span></figcaption>
+            </figure>
+            <figure class="demo-card rw-card">
+              <video data-src="assets/realworld/ours_3.mp4" poster="assets/realworld/ours_3.jpg" muted loop playsinline preload="none"></video>
+              <figcaption><span class="demo-prompt">&ldquo;Move the pot from the table to the right burner&rdquo;</span><span class="demo-src">frames 55&ndash;87</span></figcaption>
+            </figure>
+            <figure class="demo-card rw-card">
+              <video data-src="assets/realworld/ours_4.mp4" poster="assets/realworld/ours_4.jpg" muted loop playsinline preload="none"></video>
+              <figcaption><span class="demo-prompt">&ldquo;Move the pot from the right burner to the table&rdquo;</span><span class="demo-src">frames 80&ndash;112</span></figcaption>
+            </figure>
+          </div>
+          <p class="demo-note">Our bimanual robot and scene are <b>not in the pretraining data</b>. One recording per instruction; each prediction step spans two recorded frames.</p>
+        </div>
+        <p class="demo-note">Bridge, DROID, and Galaxea examples are drawn from the pretraining data. The motion column uses the same HSV encoding as above (hue = direction, brightness = strength).</p>
+        </template>
       </div>
     </section>
 
@@ -228,7 +780,7 @@
         <h2 class="section-title">References</h2>
         <ol class="references-list">
           <li id="ref1">
-            Nguyen, E. R., Zhang, Y., Ranasinghe, K., Li, X., & Ryoo, M. S. (2025). <em>Pixel motion diffusion is what we need for robot control.</em> CVPR’26
+            Nguyen, E. R., Zhang, Y., Ranasinghe, K., Li, X., & Ryoo, M. S. (2025). <em>Pixel motion diffusion is what we need for robot control.</em> CVPR&rsquo;26
             <a href="https://eronguyen.me/DAWN/" class="ref-link">[Project]</a>
           </li>
           <li id="ref2">
@@ -236,10 +788,59 @@
             <a href="https://arxiv.org/pdf/2505.07817.pdf" class="ref-link">[Paper]</a>
           </li>
           <li id="ref3">
-            Ko, P. C., Mao, J., Du, Y., Sun, S. H., & Tenenbaum, J. B. (2023). <em>Learning to act from actionless videos through dense correspondences.</em> arXiv'23
-            <a href="https://flow-diffusion.github.io/" class="ref-link">[Project]</a>
+            Wan Team (2025). <em>Wan2.2-TI2V-5B.</em> Hugging Face model repository.
+            <a href="https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B" class="ref-link">[Model]</a>
           </li>
-        </ol>
+          <li id="ref4">
+            Mees, O., Hermann, L., Rosete-Beas, E., & Burgard, W. (2022). <em>CALVIN: A benchmark for language-conditioned policy learning for long-horizon robot manipulation tasks.</em> RA-L&rsquo;22
+            <a href="http://calvin.cs.uni-freiburg.de/" class="ref-link">[Project]</a>
+          </li>
+          <li id="ref5">
+            Khazatsky, A., Pertsch, K., Nair, S., et al. (2024). <em>DROID: A large-scale in-the-wild robot manipulation dataset.</em> RSS&rsquo;24
+            <a href="https://droid-dataset.github.io/" class="ref-link">[Project]</a>
+          </li>
+          <li id="ref6">
+            Hu, Y., Guo, Y., Wang, P., et al. (2025). <em>Video prediction policy: A generalist robot policy with predictive visual representations.</em> ICML&rsquo;25
+            <a href="https://proceedings.mlr.press/v267/hu25g.html" class="ref-link">[Paper]</a>
+          </li>
+          <li id="ref7">
+            Ranasinghe, K., Zhou, H., Fang, Y., et al. (2026). <em>Future optical flow prediction improves robot control &amp; video generation.</em> CVPR&rsquo;26 Findings
+          </li>
+          <li id="ref8">
+            Reuss, M., Zhou, H., R&uuml;hle, M., et al. (2025). <em>FLOWER: Democratizing generalist robot policies with efficient vision-language-action flow policies.</em> arXiv&rsquo;25
+            <a href="https://arxiv.org/abs/2509.04996" class="ref-link">[arXiv]</a>
+          </li>
+          <li id="ref9">
+            Xiao, L., Li, J., Gao, J., et al. (2025). <em>AVA-VLA: Improving vision-language-action models with active visual attention.</em> arXiv&rsquo;25
+            <a href="https://arxiv.org/abs/2511.18960" class="ref-link">[arXiv]</a>
+          </li>
+          <li id="ref10">
+            Cai, R., Guo, J., He, X., et al. (2026). <em>Xiaomi-Robotics-0: An open-sourced vision-language-action model with real-time execution.</em> arXiv&rsquo;26
+            <a href="https://arxiv.org/abs/2602.12684" class="ref-link">[arXiv]</a>
+          </li>
+          <li id="ref11">
+            Liu, Y., Ding, P., Jiang, T., et al. (2026). <em>MMaDA-VLA: Large diffusion vision-language-action model with unified multi-modal instruction and generation.</em> ACM MM&rsquo;26
+          </li>
+          <li id="ref12">
+            Tian, Y., Yang, S., Zeng, J., et al. (2025). <em>Predictive inverse dynamics models are scalable learners for robotic manipulation.</em> ICLR&rsquo;25
+            <a href="https://proceedings.iclr.cc/paper_files/paper/2025/hash/e5b5c402bb7bd5e60bede6961d6fe39e-Abstract-Conference.html" class="ref-link">[Paper]</a>
+          </li>
+          <li id="ref13">
+            Wang, Y., Ding, P., Li, L., et al. (2025). <em>VLA-Adapter: An effective paradigm for tiny-scale vision-language-action model.</em> arXiv&rsquo;25
+            <a href="https://arxiv.org/abs/2509.09372" class="ref-link">[arXiv]</a>
+          </li>
+          <li id="ref14">
+            Wang, J., Tang, Z., Zhang, G., et al. (2026). <em>SLIM-0.5B: Learning action-grounded predictive latents for robot manipulation.</em> arXiv&rsquo;26
+            <a href="https://arxiv.org/abs/2608.09771" class="ref-link">[arXiv]</a>
+          </li>
+          <li id="ref15">
+            Xiong, Z., Gkanatsios, N., Reuss, M., &amp; Fragkiadaki, K. (2026). <em>GeomVLA: Unifying scene, motion, and action in 3D.</em> CoRL&rsquo;26
+          </li>
+              <li id="ref16">
+            Zhao, et al. (2026). <em>RynnWorld-4D: 4D embodied world models for robotic manipulation.</em> arXiv&rsquo;26
+            <a href="https://arxiv.org/abs/2607.06559" class="ref-link">[arXiv]</a>
+          </li>
+    </ol>
       </div>
     </section>
 
@@ -249,7 +850,7 @@
   <footer class="footer">
     <div class="container">
       <p>
-        First released on Feb 27, 2026. Last updated on Mar 2, 2026.
+        First released on Feb 27, 2026. Last updated on Nov 17, 2026.
       </p>
       <p>
         &copy; 2026 The Authors. All rights reserved.

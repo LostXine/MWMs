@@ -132,16 +132,16 @@
     const ex  = WCX + len * Math.cos(ang);
     const ey  = WCY + len * Math.sin(ang);
 
-    // White arrow with dark shadow — always visible against the coloured ring
-    // and the dark transparent centre
-    ctx.shadowColor = 'rgba(0,0,0,0.7)';
+    // Ink arrow with white halo — visible against the coloured ring
+    // and the light page background in the centre
+    ctx.shadowColor = 'rgba(255,255,255,0.95)';
     ctx.shadowBlur  = 5;
 
     // Shaft
     ctx.beginPath();
     ctx.moveTo(WCX, WCY);
     ctx.lineTo(ex, ey);
-    ctx.strokeStyle = '#ffffff';
+    ctx.strokeStyle = '#18234F';
     ctx.lineWidth   = 2.5;
     ctx.lineCap     = 'round';
     ctx.stroke();
@@ -159,7 +159,7 @@
     ctx.shadowBlur = 0;
     ctx.beginPath();
     ctx.arc(WCX, WCY, 4, 0, Math.PI * 2);
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = '#18234F';
     ctx.fill();
   }
 
@@ -236,9 +236,9 @@
       overlay.width = W; overlay.height = H;
       nativeCanvas = null;
       const ctx = disp.getContext('2d');
-      ctx.fillStyle = '#1a1d27';
+      ctx.fillStyle = '#E9EFFB';
       ctx.fillRect(0, 0, W, H);
-      ctx.fillStyle = '#5a5f78';
+      ctx.fillStyle = '#9AA0D6';
       ctx.font = '13px "JetBrains Mono", monospace';
       ctx.textAlign = 'center';
       ctx.fillText('Image not found: ' + sample.main, W / 2, H / 2 - 10);
@@ -358,8 +358,8 @@ function copyBibtex() {
     const btn = document.querySelector('.copy-btn');
     const icon = btn.querySelector('i');
     icon.className = 'fas fa-check';
-    btn.style.background = '#4ade80';
-    btn.style.color = '#0d0f14';
+    btn.style.background = '#2F5DA8';
+    btn.style.color = '#FFFFFF';
     setTimeout(() => {
       icon.className = 'fas fa-copy';
       btn.style.background = '';
@@ -367,24 +367,6 @@ function copyBibtex() {
     }, 2000);
   });
 }
-
-// ---------- Intersection Observer: fade-in sections ----------
-const observer = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  },
-  { threshold: 0.08 }
-);
-
-document.querySelectorAll('.section, .method-card, figure, .video-item').forEach((el) => {
-  el.classList.add('fade-in');
-  observer.observe(el);
-});
 
 // ---------- Lazy-load videos ----------
 // Pause autoplay videos when they leave the viewport to save resources
@@ -405,7 +387,7 @@ const videoObserver = new IntersectionObserver(
 document.querySelectorAll('video[autoplay]').forEach((v) => videoObserver.observe(v));
 
 // ---------- Smooth active nav highlighting ----------
-// If you add a <nav> bar later, this snippet tracks which section is in view
+// Keep both navigation surfaces synchronized with the visible section.
 const sections = document.querySelectorAll('section[id]');
 const navLinks = document.querySelectorAll('nav a[href^="#"]');
 
@@ -414,9 +396,12 @@ if (navLinks.length > 0) {
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          navLinks.forEach((link) => link.classList.remove('active'));
-          const active = document.querySelector(`nav a[href="#${entry.target.id}"]`);
-          if (active) active.classList.add('active');
+          navLinks.forEach((link) => {
+            const active = link.hash === `#${entry.target.id}`;
+            link.classList.toggle('active', active);
+            if (active) link.setAttribute('aria-current', 'location');
+            else link.removeAttribute('aria-current');
+          });
         }
       });
     },
@@ -424,3 +409,40 @@ if (navLinks.length > 0) {
   );
   sections.forEach((s) => sectionObserver.observe(s));
 }
+
+// ---------- Floating nav: show once the hero nav leaves the viewport ----------
+(function () {
+  const floatNav = document.getElementById('float-nav');
+  const heroNav = document.querySelector('.page-nav');
+  if (!floatNav || !heroNav) return;
+  new IntersectionObserver(([entry]) => {
+    floatNav.classList.toggle('show', !entry.isIntersecting && entry.boundingClientRect.top < 0);
+  }).observe(heroNav);
+})();
+
+// ---------- Real-world prediction tabs (lazy-load videos of the active tab) ----------
+(function () {
+  const tabs = document.querySelectorAll('.rw-tab');
+  const panels = document.querySelectorAll('.rw-panel');
+  if (!tabs.length) return;
+  function activate(ds) {
+    tabs.forEach((t) => t.classList.toggle('active', t.dataset.ds === ds));
+    panels.forEach((p) => {
+      const on = p.dataset.ds === ds;
+      p.classList.toggle('active', on);
+      p.querySelectorAll('video').forEach((v) => {
+        if (on) {
+          if (!v.src && v.dataset.src) v.src = v.dataset.src;
+          v.play().catch(() => {});
+        } else v.pause();
+      });
+    });
+  }
+  tabs.forEach((t) => t.addEventListener('click', () => activate(t.dataset.ds)));
+  const demos = document.getElementById('demos');
+  if (demos) {
+    new IntersectionObserver((es, obs) => {
+      if (es[0].isIntersecting) { activate(document.querySelector('.rw-tab.active').dataset.ds); obs.disconnect(); }
+    }, { rootMargin: '200px' }).observe(demos);
+  }
+})();
